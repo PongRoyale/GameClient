@@ -59,12 +59,16 @@ list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
      Classes/MainMenuScene.cpp
      Classes/GameScene.cpp
-     )
+     Classes/PaddleSprite.cpp
+     Classes/PongBallSprite.cpp
+)
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/MainMenuScene.h
      Classes/GameScene.h
-     )
+     Classes/PaddleSprite.h
+     Classes/PongBallSprite.h
+)
 
 if(ANDROID)
     # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml

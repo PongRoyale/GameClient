@@ -26,6 +26,8 @@
 #define __GAME_SCENE_H__
 
 #include "cocos2d.h"
+#include "PaddleSprite.h"
+#include "PongBallSprite.h"
 
 class GameScene : public cocos2d::Scene
 {

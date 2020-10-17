@@ -28,7 +28,14 @@ USING_NS_CC;
 
 Scene* GameScene::createScene()
 {
-    return GameScene::create();
+    Scene* scene = GameScene::createWithPhysics();
+
+    scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
+
+    auto layer = GameScene::create();
+    scene->addChild(layer);
+
+    return scene;
 }
 
 // Print useful error message instead of segfaulting when files are not there.
@@ -51,8 +58,53 @@ bool GameScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+    // Add your paddle
+
+    auto you = createPaddleSprite(
+            cocos2d::Vec2((origin.x + visibleSize.width) / 2.0 - 50, 10));
+    addChild(you);
+
+
+
+    auto listener1 = cocos2d::EventListenerTouchOneByOne::create();
+    listener1->onTouchBegan = [=](Touch* touch, Event* event){
+
+        float dx = 75;
+        if (touch->getLocation().x < visibleSize.width / 2 + origin.x) {
+            dx = -dx;
+        }
+
+        auto moveBy = MoveBy::create(1, Vec2(dx, 0));
+        you->runAction(RepeatForever::create(moveBy));
+
+        return true; // if you are consuming it
+    };
+
+    // trigger when you let up
+    listener1->onTouchEnded = [=](Touch* touch, Event* event){
+        you->stopAllActions();
+        return true;
+    };
+
+_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
+
+    // Add enemy paddles 
+
+    auto enemy = createPaddleSprite(
+            cocos2d::Vec2((origin.x + visibleSize.width) / 2.0 - 50, visibleSize.height - 20));
+    addChild(enemy);
+
+    // Add Pong Ball
+
+    auto ball = createPongSprite(
+            cocos2d::Vec2((origin.x + visibleSize.width) / 2.0 - origin.x, visibleSize.height / 2 + origin.y));
+    addChild(ball);
+
+
+
+
     /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
+    // 2. add a menu item with "X" image, which is clicked to quit the scene
     //    you may modify it.
 
     // add a "close" icon to exit the progress. it's an autorelease object
@@ -79,41 +131,7 @@ bool GameScene::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
-    /////////////////////////////
-    // 3. add your codes below...
 
-    // add a label shows "Hello World"
-    // create and initialize a label
-
-    auto label = Label::createWithTTF("Game Scene Hello World", "fonts/Marker Felt.ttf", 24);
-    if (label == nullptr)
-    {
-        problemLoading("'fonts/Marker Felt.ttf'");
-    }
-    else
-    {
-        // position the label on the center of the screen
-        label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height - label->getContentSize().height));
-
-        // add the label as a child to this layer
-        this->addChild(label, 1);
-    }
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-    if (sprite == nullptr)
-    {
-        problemLoading("'HelloWorld.png'");
-    }
-    else
-    {
-        // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
-    }
     return true;
 }
 
