@@ -6,6 +6,6 @@
 
 cocos2d::Sprite* createPongSprite(cocos2d::Vec2 position);
 
-#endif // __PADDLE_SPRITE_H__
+#endif // __PONG_SPRITE_H__
 
 

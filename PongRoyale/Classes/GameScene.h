@@ -41,6 +41,11 @@ public:
 
     // a selector callback
     void menuOpenGameSceneCallback(cocos2d::Ref* pSender);
+
+
+    // On contact between paddle and ball
+    bool onContactBegin(cocos2d::PhysicsContact &contact);
+
     
     // implement the "static create()" method manually
     CREATE_FUNC(GameScene);

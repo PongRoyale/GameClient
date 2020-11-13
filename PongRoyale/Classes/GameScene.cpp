@@ -26,6 +26,7 @@
 
 USING_NS_CC;
 
+
 Scene* GameScene::createScene()
 {
     Scene* scene = GameScene::createWithPhysics();
@@ -100,6 +101,11 @@ _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
             cocos2d::Vec2((origin.x + visibleSize.width) / 2.0 - origin.x, visibleSize.height / 2 + origin.y));
     addChild(ball);
 
+    
+    // adds contact event listener
+    auto contactListener = EventListenerPhysicsContact::create();
+    contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 
 
@@ -135,6 +141,20 @@ _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
     return true;
 }
 
+bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
+{
+
+    printf("HELLO WOLRD HERE\n");
+
+    PhysicsBody* bodyA = contact.getShapeA()->getBody();
+    //auto nodeA = contact.getShapeA()->getBody()->getNode();
+    
+    auto v = bodyA->getVelocity();
+    bodyA->setVelocity(cocos2d::Vec2(v.x, -v.y));
+
+
+    return true;
+}
 
 void GameScene::menuCloseCallback(Ref* pSender)
 {
