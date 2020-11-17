@@ -62,9 +62,8 @@ bool GameScene::init()
     // Add your paddle
 
     auto you = createPaddleSprite(
-            cocos2d::Vec2((origin.x + visibleSize.width) / 2.0 - 50, 10));
+            cocos2d::Vec2((origin.x + visibleSize.width) / 2.0, 10));
     addChild(you);
-
 
 
     auto listener1 = cocos2d::EventListenerTouchOneByOne::create();
@@ -89,17 +88,37 @@ bool GameScene::init()
 
 _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
 
-    // Add enemy paddles 
-
-    auto enemy = createPaddleSprite(
-            cocos2d::Vec2((origin.x + visibleSize.width) / 2.0 - 50, visibleSize.height - 20));
-    addChild(enemy);
 
     // Add Pong Ball
 
     auto ball = createPongSprite(
-            cocos2d::Vec2((origin.x + visibleSize.width) / 2.0 - origin.x, visibleSize.height / 2 + origin.y));
+            cocos2d::Vec2((origin.x + visibleSize.width) / 2.0, visibleSize.height / 2 + origin.y));
     addChild(ball);
+
+    
+    // Add Top Wall
+    auto topWall = createWallSprite(
+            cocos2d::Vec2(origin.x + visibleSize.width / 2.0, visibleSize.height + origin.y),
+            visibleSize, UP);
+    addChild(topWall);
+
+    // Add Right Wall
+    auto rightWall = createWallSprite(
+            cocos2d::Vec2(origin.x + visibleSize.width, visibleSize.height/2.0 + origin.y),
+            visibleSize, RIGHT);
+    addChild(rightWall);
+
+    // Add Left Wall
+    auto leftWall = createWallSprite(
+            cocos2d::Vec2(origin.x, visibleSize.height/2.0 + origin.y),
+            visibleSize, LEFT);
+    addChild(leftWall);
+
+    // Add Bottom Wall
+    auto bottomWall = createWallSprite(
+            cocos2d::Vec2(origin.x + visibleSize.width/2.0, origin.y),
+            visibleSize, BOTTOM);
+    addChild(bottomWall);
 
     
     // adds contact event listener
@@ -147,10 +166,33 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
     printf("HELLO WOLRD HERE\n");
 
     PhysicsBody* bodyA = contact.getShapeA()->getBody();
+    PhysicsBody* bodyB = contact.getShapeB()->getBody();
+
     //auto nodeA = contact.getShapeA()->getBody()->getNode();
     
     auto v = bodyA->getVelocity();
-    bodyA->setVelocity(cocos2d::Vec2(v.x, -v.y));
+
+    // Hit top wall
+    if (bodyB->getCategoryBitmask() & (1<<3)) {
+        printf("HIT TOP WALL\n");
+        bodyA->setVelocity(cocos2d::Vec2(v.x, -v.y));
+    } else if (bodyB->getCategoryBitmask() & (1<<4)) 
+    { // Hit Left Wall
+        printf("HIT Left WALL\n");
+        bodyA->setVelocity(cocos2d::Vec2(-v.x, v.y));
+    } else if (bodyB->getCategoryBitmask() & (1<<5)) 
+    { // Hit Left Wall
+        printf("HIT Left WALL\n");
+        bodyA->setVelocity(cocos2d::Vec2(-v.x, v.y));
+    } else if (bodyB->getCategoryBitmask() & (1<<6)) 
+    { // Hit Bottom Wall
+        printf("HIT Bottom WALL\n");
+        bodyA->setVelocity(cocos2d::Vec2(v.x, -v.y));
+    } else 
+    { // Assume its paddle
+        printf("HIT PADDLE\n");
+        bodyA->setVelocity(cocos2d::Vec2(v.x, -v.y));
+    }
 
 
     return true;

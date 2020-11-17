@@ -28,6 +28,7 @@
 #include "cocos2d.h"
 #include "PaddleSprite.h"
 #include "PongBallSprite.h"
+#include "WallSprite.h"
 
 class GameScene : public cocos2d::Scene
 {

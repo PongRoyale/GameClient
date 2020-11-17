@@ -27,7 +27,6 @@ cocos2d::Sprite* createPaddleSprite(cocos2d::Vec2 position)
     auto body = cocos2d::PhysicsBody::createBox(cocos2d::Size(PADDLE_WIDTH, PADDLE_HEIGHT));
     body->setDynamic(false);
     body->setCategoryBitmask(0x01);
-    //body->setCollisionBitmask(0x02);
     body->setContactTestBitmask(0x02);
 
     paddle->setPhysicsBody(body);

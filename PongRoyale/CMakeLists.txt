@@ -61,6 +61,7 @@ list(APPEND GAME_SOURCE
      Classes/GameScene.cpp
      Classes/PaddleSprite.cpp
      Classes/PongBallSprite.cpp
+     Classes/WallSprite.cpp
 )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h

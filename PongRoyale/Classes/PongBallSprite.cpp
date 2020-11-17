@@ -20,7 +20,8 @@ cocos2d::Sprite* createPongSprite(cocos2d::Vec2 position)
     auto body = cocos2d::PhysicsBody::createCircle(BALL_RADIUS);
     body->setCategoryBitmask(0x02);
     //body->setCollisionBitmask(0x01);
-    body->setContactTestBitmask(0x01);
+    //body->setContactTestBitmask(0x01);
+    body->setContactTestBitmask((1<<7) - 1 - 2);
     body->setVelocity(cocos2d::Vec2(10, -60));
     pongNode->setPhysicsBody(body);
 
