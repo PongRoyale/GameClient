@@ -10,6 +10,7 @@
 #define __REQUEST_H__
 
 #include "cocos2d.h"
+using namespace cocos2d;
 
 #define URL "localhost:3001:/"
 

@@ -48,3 +48,4 @@ void login(char * username, char * password, const ccHttpRequestCallback &callba
     
     request->release();
 }
+

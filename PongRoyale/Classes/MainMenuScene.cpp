@@ -23,7 +23,9 @@
  ****************************************************************************/
 
 #include "MainMenuScene.h"
+#include "ui/CocosGUI.h"
 #include "GameScene.h"
+//#include "Request.h"
 
 USING_NS_CC;
 
@@ -105,7 +107,7 @@ bool MainMenu::init()
     // add a label shows "Hello World"
     // create and initialize a label
 
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
+    auto label = Label::createWithTTF("Login", "fonts/Marker Felt.ttf", 24);
     if (label == nullptr)
     {
         problemLoading("'fonts/Marker Felt.ttf'");
@@ -121,19 +123,59 @@ bool MainMenu::init()
     }
 
     // add "MainMenu" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-    if (sprite == nullptr)
-    {
-        problemLoading("'HelloWorld.png'");
-    }
-    else
-    {
-        // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    //auto sprite = Sprite::create("HelloWorld.png");
+    //if (sprite == nullptr)
+    //{
+    //    problemLoading("'HelloWorld.png'");
+    //}
+    //else
+    //{
+    //    // position the sprite on the center of the screen
+    //    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
-    }
+    //    // add the sprite as a child to this layer
+    //    this->addChild(sprite, 0);
+    //}
+
+
+    // Create text fields to log in
+    auto usernameTextField = cocos2d::ui::TextField::create("Username","Arial",30);
+    float x = origin.x + visibleSize.width/2.0 - usernameTextField->getContentSize().width/2;
+    float y = origin.y + visibleSize.height/2.0 - usernameTextField->getContentSize().height/2;
+    usernameTextField->setPosition(cocos2d::Vec2(x, y+50));
+    this->addChild(usernameTextField);
+
+
+    auto passwordTextField = cocos2d::ui::TextField::create("Password", "Arial", 30);
+    passwordTextField->setPasswordEnabled(true);
+    passwordTextField->setPosition(cocos2d::Vec2(x, y));
+    passwordTextField->setMaxLength(10);
+    passwordTextField->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        log("editing a TextFiel\n");
+    });
+    this->addChild(passwordTextField);
+
+
+    auto button = cocos2d::ui::Button::create("normal_image.png", "selected_image.png", "disabled_image.png");
+    button->setTitleText("Login");
+    button->setPosition(cocos2d::Vec2(x, y-50));
+    button->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
+        switch (type)
+        {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                log("Button 1 clicked\n");
+                //login(usernameTextField->getString(), passwordTextField->getString(), CC_CALLBACK_2 (MainMenu::onHttpRequestCompleted, this));
+                break;
+            default:
+                break;
+        }
+    });
+
+    this->addChild(button);
+
+
     return true;
 }
 
@@ -147,7 +189,6 @@ void MainMenu::menuCloseCallback(Ref* pSender)
 
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
-
 
 }
 
@@ -165,3 +206,4 @@ void MainMenu::menuOpenGameSceneCallback(cocos2d::Ref* pSender)
     //director->replaceScene(scene);
     director->pushScene(scene);
 }
+

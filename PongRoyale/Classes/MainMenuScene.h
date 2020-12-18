@@ -40,6 +40,9 @@ public:
     // a selector callback
     void menuOpenGameSceneCallback(cocos2d::Ref* pSender);
     
+    // On Login
+    //void onHttpRequestCompleted(cocos2d::PhysicsContact &contact);
+    
     // implement the "static create()" method manually
     CREATE_FUNC(MainMenu);
 };

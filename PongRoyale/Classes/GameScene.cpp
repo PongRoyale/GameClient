@@ -29,6 +29,7 @@ USING_NS_CC;
 
 Scene* GameScene::createScene()
 {
+
     Scene* scene = GameScene::createWithPhysics();
 
     scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
@@ -175,7 +176,9 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact &contact)
     // Hit top wall
     if (bodyB->getCategoryBitmask() & (1<<3)) {
         printf("HIT TOP WALL\n");
-        bodyA->setVelocity(cocos2d::Vec2(v.x, -v.y));
+        //bodyA->setVelocity(cocos2d::Vec2(v.x, -v.y));
+        auto nodeA = (Sprite *) contact.getShapeA()->getBody()->getNode();
+        nodeA->removeFromParent();
     } else if (bodyB->getCategoryBitmask() & (1<<4)) 
     { // Hit Left Wall
         printf("HIT Left WALL\n");
